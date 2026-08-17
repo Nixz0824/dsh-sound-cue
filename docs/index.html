@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>dsh-sound-cue — Listen / 试听</title>
+  <style>
+    :root {
+      --ink: #171717;
+      --muted: #6b6b6b;
+      --line: #e6e6e6;
+      --bg: #fafafa;
+      --card: #fff;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 20px 64px;
+    }
+    h1 { font-size: 22px; font-weight: 650; margin: 0 0 6px; letter-spacing: -0.02em; }
+    .lead { color: var(--muted); margin: 0 0 28px; font-size: 14px; }
+    .grid { display: grid; gap: 14px; }
+    @media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } }
+    article {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px 18px 16px;
+    }
+    article.active { outline: 2px solid var(--ink); }
+    h2 { font-size: 16px; margin: 0 0 4px; }
+    p { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
+    button {
+      appearance: none;
+      border: 0;
+      background: var(--ink);
+      color: #fff;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover { filter: brightness(1.08); }
+    audio { width: 100%; margin-top: 10px; }
+    footer { margin-top: 28px; color: var(--muted); font-size: 12px; }
+    a { color: var(--ink); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>dsh-sound-cue</h1>
+    <p class="lead">
+      试听两种提示音（默认风格 A，与插件现场合成同一组音符）。<br />
+      Preview the two cues (default style A — same notes the plugin synthesizes).
+    </p>
+    <div class="grid">
+      <article id="card-needs">
+        <h2>需要操作 / Needs attention</h2>
+        <p>审批、提问或计划确认出现时。<br />When approval, a question, or plan review appears.</p>
+        <button type="button" data-kind="needs">▶ 试听 / Play</button>
+        <audio id="audio-needs" controls preload="auto" src="sounds/needs.wav">
+          <a href="sounds/needs.wav">needs.wav</a>
+        </audio>
+      </article>
+      <article id="card-done">
+        <h2>任务完成 / Task done</h2>
+        <p>当前回合结束，或后台会话完成时。<br />When the current turn ends, or a background session completes.</p>
+        <button type="button" data-kind="done">▶ 试听 / Play</button>
+        <audio id="audio-done" controls preload="auto" src="sounds/done.wav">
+          <a href="sounds/done.wav">done.wav</a>
+        </audio>
+      </article>
+    </div>
+    <footer>
+      <a href="https://github.com/Nixz0824/dsh-sound-cue">GitHub</a>
+      · 若未自动播放，点按钮即可 / If it did not autoplay, click the button.
+    </footer>
+  </main>
+  <script>
+    // Same note tables as lib/client.js style A.
+    var NEEDS_A = [
+      { freq: 880, durMs: 130, atMs: 0, gain: 0.7, decayExp: 7 },
+      { freq: 1174.66, durMs: 130, atMs: 150, gain: 0.7, decayExp: 7 }
+    ];
+    var DONE_A = [
+      { freq: 523.25, durMs: 150, atMs: 0, gain: 0.6, decayExp: 5 },
+      { freq: 659.25, durMs: 150, atMs: 110, gain: 0.6, decayExp: 5 },
+      { freq: 783.99, durMs: 220, atMs: 220, gain: 0.65, decayExp: 4 }
+    ];
+    var actx = null;
+    function ctx() {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      if (!actx) actx = new AC();
+      if (actx.state === "suspended") actx.resume();
+      return actx;
+    }
+    function tone(dest, o) {
+      var c = ctx();
+      if (!c) return;
+      var t0 = c.currentTime + (o.atMs || 0) / 1000;
+      var dur = o.durMs / 1000;
+      var osc = c.createOscillator();
+      var g = c.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(o.freq, t0);
+      g.gain.setValueAtTime(0, t0);
+      g.gain.linearRampToValueAtTime(o.gain, t0 + 0.008);
+      g.gain.setTargetAtTime(0.0001, t0 + 0.008, dur / (o.decayExp || 7));
+      osc.connect(g);
+      g.connect(dest);
+      osc.start(t0);
+      osc.stop(t0 + dur + 0.3);
+    }
+    function playSynth(kind) {
+      var c = ctx();
+      if (!c) return false;
+      var master = c.createGain();
+      master.gain.value = 0.5;
+      master.connect(c.destination);
+      var notes = kind === "done" ? DONE_A : NEEDS_A;
+      for (var i = 0; i < notes.length; i++) tone(master, notes[i]);
+      return true;
+    }
+    function play(kind) {
+      document.querySelectorAll("article").forEach(function (el) { el.classList.remove("active"); });
+      var card = document.getElementById("card-" + kind);
+      if (card) card.classList.add("active");
+      var audio = document.getElementById("audio-" + kind);
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+        var p = audio.play();
+        if (p && p.catch) {
+          p.catch(function () { playSynth(kind); });
+          return;
+        }
+      }
+      playSynth(kind);
+    }
+    document.querySelectorAll("button[data-kind]").forEach(function (btn) {
+      btn.addEventListener("click", function () { play(btn.getAttribute("data-kind")); });
+    });
+    var hash = (location.hash || "").replace("#", "");
+    if (hash === "needs" || hash === "done") {
+      play(hash);
+    }
+  </script>
+</body>
+</html>

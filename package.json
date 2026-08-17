@@ -1,0 +1,50 @@
+{
+  "name": "@dsh-external/dsh-sound-cue",
+  "version": "0.1.0",
+  "description": "DSH sound cues: a short Web Audio ding when you need to act (approval / question), and a different one when a task finishes. 需要操作与任务完成时的简短提示音（Web Audio 合成，无弹窗无系统通知）。",
+  "private": false,
+  "type": "module",
+  "main": "./lib/index.js",
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE",
+    "docs/"
+  ],
+  "keywords": [
+    "deepseek",
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "sound",
+    "notification",
+    "web-audio"
+  ],
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nixz0824/dsh-sound-cue.git"
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "check": "node --check lib/index.js && node --check lib/client.js",
+    "sounds": "python scripts/gen-preview-sounds.py",
+    "test": "npm run check"
+  },
+  "dsh": {
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime"
+      ],
+      "platform": "web"
+    },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

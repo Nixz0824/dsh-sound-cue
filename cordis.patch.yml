@@ -1,0 +1,17 @@
+# dsh-sound-cue bundle layer: 纯客户端提示音插件。
+#
+# 配置（可选，均可省略；默认值如下）：
+#   style: 'A' | 'B'     —— A=简约电子铃（叮咚/琶音，默认）；B=木质敲击（叩叩/咻叮）
+#   volume: 0..1         —— 音量（默认 0.5）
+#   needsOn: bool        —— "需要操作"提示音开关（默认 true）
+#   doneOn: bool         —— "任务完成"提示音开关（默认 true）
+#   skipSubagents: bool  —— 跳过子代理会话的事件（默认 true）
+- insert:
+    - id: sound-cue
+      name: '@dsh-external/dsh-sound-cue'
+      config:
+        style: 'A'
+        volume: 0.5
+        needsOn: true
+        doneOn: true
+        skipSubagents: true
