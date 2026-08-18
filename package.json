@@ -10,6 +10,8 @@
     "cordis.patch.yml",
     "README.md",
     "LICENSE",
+    "CHANGELOG.md",
+    "SECURITY.md",
     "docs/"
   ],
   "keywords": [
@@ -22,6 +24,10 @@
     "web-audio"
   ],
   "license": "BSD-3-Clause",
+  "homepage": "https://github.com/Nixz0824/dsh-sound-cue#readme",
+  "bugs": {
+    "url": "https://github.com/Nixz0824/dsh-sound-cue/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Nixz0824/dsh-sound-cue.git"
