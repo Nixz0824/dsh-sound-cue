@@ -45,13 +45,20 @@ Click to hear the two default (style A) cues — the same notes the plugin synth
 
 ### 安装
 
+仓库是公开的，现在就可以装，不必等社区精选列表收录。
+
 ```bash
+# 推荐：GitHub Release 预构建包
+dsh plugin --profile web add https://github.com/Nixz0824/dsh-sound-cue/releases/latest/download/dsh-external-dsh-sound-cue-0.1.0.tgz
+
+# 或直接从 GitHub 源码安装
 dsh plugin --profile web add github:Nixz0824/dsh-sound-cue
+
 # 或本地源码：
 dsh plugin --profile web add "link:<本目录绝对路径>"
 ```
 
-装完**刷新浏览器页面**即可生效（客户端 bundle 随页面加载）。
+装完**刷新浏览器页面**即可生效（客户端 bundle 随页面加载）。重启 `dsh web` 一次更稳。
 
 ### 配置
 
@@ -107,13 +114,20 @@ Client-only. Cues are synthesized with the Web Audio API — **no popups, no OS 
 
 ### Install
 
+The repository is public. You can install it now; listing on the community catalog is separate.
+
 ```bash
+# Recommended: GitHub Release tarball
+dsh plugin --profile web add https://github.com/Nixz0824/dsh-sound-cue/releases/latest/download/dsh-external-dsh-sound-cue-0.1.0.tgz
+
+# Or install from GitHub source
 dsh plugin --profile web add github:Nixz0824/dsh-sound-cue
+
 # or from a local checkout:
 dsh plugin --profile web add "link:<absolute-path-to-this-folder>"
 ```
 
-**Reload the browser page** after install (the client bundle loads with the page).
+**Reload the browser page** after install (the client bundle loads with the page). Restart `dsh web` once if the plugin does not appear.
 
 ### Config
 
