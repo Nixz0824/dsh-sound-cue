@@ -1,5 +1,12 @@
 node_modules/
 *.tgz
 .DS_Store
+Thumbs.db
 npm-debug.log*
 *.log
+.idea/
+.vscode/
+src/
+tsconfig.json
+tsdown.config.ts
+scripts/build.sh
