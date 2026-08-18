@@ -39,8 +39,9 @@
   },
   "scripts": {
     "check": "node --check lib/index.js && node --check lib/client.js",
+    "smoke": "node scripts/smoke-client.mjs",
     "sounds": "python scripts/gen-preview-sounds.py",
-    "test": "npm run check"
+    "test": "npm run check && npm run smoke"
   },
   "dsh": {
     "client": {
