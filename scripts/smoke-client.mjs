@@ -10,6 +10,9 @@ const mustHave = [
   ["client ModuleLoader", /__ModuleLoader__\.load/],
   ["needs cue", /needsOn|pendingInteraction/],
   ["done cue", /doneOn|completed/],
+  ["new client status source", /uiSession/],
+  ["new client completion field", /completionUnread/],
+  ["debug surface", /__dshSoundCue/],
   ["host apply", /export function apply/],
 ];
 

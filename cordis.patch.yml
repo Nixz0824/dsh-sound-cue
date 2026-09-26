@@ -6,12 +6,14 @@
 #   needsOn: bool        —— "需要操作"提示音开关（默认 true）
 #   doneOn: bool         —— "任务完成"提示音开关（默认 true）
 #   skipSubagents: bool  —— 跳过子代理会话的事件（默认 true）
+#   debug: bool          —— 控制台打印每次触发（默认 false）
 - insert:
     - id: sound-cue
-      name: '@dsh-external/dsh-sound-cue'
+      name: 'dsh-sound-cue'
       config:
         style: 'A'
         volume: 0.5
         needsOn: true
         doneOn: true
         skipSubagents: true
+        debug: false

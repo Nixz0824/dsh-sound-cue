@@ -1,7 +1,7 @@
 {
-  "name": "@dsh-external/dsh-sound-cue",
-  "version": "0.1.0",
-  "description": "DSH sound cues: a short Web Audio ding when you need to act (approval / question), and a different one when a task finishes. 需要操作与任务完成时的简短提示音（Web Audio 合成，无弹窗无系统通知）。",
+  "name": "dsh-sound-cue",
+  "version": "0.2.0",
+  "description": "DSH sound cues: a short Web Audio ding when you need to act (approval / question / plan review), and a different one when a task finishes. Works on DSH 0.1.7+ (desktop & web) and on 0.1.0-rc.6 web. 需要操作与任务完成时的简短提示音（Web Audio 合成，无弹窗无系统通知）。",
   "private": false,
   "type": "module",
   "main": "./lib/index.js",
@@ -19,8 +19,11 @@
     "deepseek-harness",
     "dsh",
     "dsh-plugin",
+    "dsh-bundle",
+    "plugin",
     "sound",
     "notification",
+    "audio",
     "web-audio"
   ],
   "license": "BSD-3-Clause",
@@ -40,14 +43,14 @@
   "scripts": {
     "check": "node --check lib/index.js && node --check lib/client.js",
     "smoke": "node scripts/smoke-client.mjs",
+    "test:client": "node scripts/test-client.mjs",
     "sounds": "python scripts/gen-preview-sounds.py",
-    "test": "npm run check && npm run smoke"
+    "pack": "npm pack",
+    "test": "npm run check && npm run smoke && npm run test:client"
   },
   "dsh": {
     "client": {
-      "inject": [
-        "@deepseek-ai/dsh-client-runtime"
-      ],
+      "inject": [],
       "platform": "web"
     },
     "bundle": {
